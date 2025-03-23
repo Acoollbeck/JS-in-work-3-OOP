@@ -121,13 +121,28 @@ class Slider {
     this.btns = document.querySelectorAll(btns);
     this.slideIndex = 0;
   }
-  showSlide(index) {
+  initSlide(index) {
     this.slides.forEach(slide => {
       slide.classList.add('hidden-slide');
       slide.classList.remove('fadeIn');
     });
     this.slides[index].classList.remove('hidden-slide');
     this.slides[index].classList.add('animated', 'fadeIn');
+    try {
+      this.card = document.querySelector('.hanson');
+      if (!this.card) throw new Error('Элемент .hanson не найден!');
+      this.card.style.display = 'none';
+      if (this.slides[index].classList.contains('fadeIn') && this.slides[index].classList.contains('modules')) {
+        setTimeout(() => {
+          this.card.style.display = 'block';
+          this.card.classList.add('animated', 'slideInUp');
+        }, 3000);
+      } else {
+        this.card.classList.remove('slideInUp');
+      }
+    } catch (error) {
+      console.warn(error.message);
+    }
   }
   changeSlide(step) {
     let newIndex = this.slideIndex + step;
@@ -137,15 +152,18 @@ class Slider {
       newIndex = this.slides.length - 1;
     }
     this.slideIndex = newIndex;
-    this.showSlide(newIndex);
+    this.initSlide(newIndex);
   }
   render() {
-    this.showSlide(this.slideIndex);
+    this.initSlide(this.slideIndex);
     this.btns.forEach(btn => {
-      btn.addEventListener('click', () => this.changeSlide(1));
+      btn.addEventListener('click', () => {
+        this.changeSlide(1);
+      });
       if (btn.parentNode.previousElementSibling) {
         btn.parentNode.previousElementSibling.addEventListener('click', () => {
-          this.showSlide(0);
+          this.slideIndex = 0;
+          this.initSlide(this.slideIndex);
         });
       }
     });
