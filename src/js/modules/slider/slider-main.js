@@ -1,8 +1,8 @@
 import Slider from "./slider";
 
 export default class MainSlider extends Slider {
-    constructor(options) {
-        super(options)
+    constructor(btns) {
+        super(btns)
     }
 
     initSlide(index) {
