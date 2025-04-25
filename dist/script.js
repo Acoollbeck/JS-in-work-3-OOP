@@ -98,6 +98,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/slider/slider-main */ "./src/js/modules/slider/slider-main.js");
 /* harmony import */ var _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider/slider-mini */ "./src/js/modules/slider/slider-mini.js");
 /* harmony import */ var _modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/videoPlayer */ "./src/js/modules/videoPlayer.js");
+/* harmony import */ var _modules_defference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/defference */ "./src/js/modules/defference.js");
+
 
 
 
@@ -124,12 +126,71 @@ window.addEventListener('DOMContentLoaded', () => {
     next: '.feed__slider .slick-next',
     prev: '.feed__slider .slick-prev'
   });
+  const defference = new _modules_defference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item');
   slider.render();
   videoPlayer.render();
   showUpSlider.render();
   modulesSlider.render();
   feedSlider.render();
+  defference.render();
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/defference.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/defference.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Defference; });
+class Defference {
+  constructor(officerOld, officerNew, officerItems) {
+    this.officerOld = document.querySelector(officerOld);
+    this.officerNew = document.querySelector(officerNew);
+    this.oldItems = this.officerOld.querySelectorAll(officerItems);
+    this.newItems = this.officerNew.querySelectorAll(officerItems);
+    this.oldCounter = 0;
+    this.newCounter = 0;
+  }
+  hideItems(items) {
+    items.forEach((item, i, array) => {
+      if (i !== array.length - 1) {
+        item.style.display = 'none';
+      }
+    });
+  }
+  bindTriggers(parent, items, counterName) {
+    parent.querySelector('.plus').addEventListener('click', () => {
+      const counter = this[counterName];
+      if (counter !== items.length - 2) {
+        this.addAnimation(items, counter);
+        items[counter].style.display = 'flex';
+        this[counterName]++;
+      } else {
+        items[counter].style.display = 'flex';
+        items[items.length - 1].remove();
+      }
+    });
+  }
+  addAnimation(items) {
+    items.forEach(item => {
+      item.classList.add('animated', 'slideInDown');
+      item.addEventListener('animationend', () => {
+        item.classList.remove('slideInDown');
+      });
+    });
+  }
+  render() {
+    this.hideItems(this.oldItems);
+    this.hideItems(this.newItems);
+    this.bindTriggers(this.officerOld, this.oldItems, 'oldCounter');
+    this.bindTriggers(this.officerNew, this.newItems, 'newCounter');
+  }
+}
 
 /***/ }),
 
@@ -320,9 +381,7 @@ class MiniSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
   render() {
     this.init();
     this.initActiveSlide();
-    // this.startAutoplay()
     this.bindTriggers();
-    // this.bindAutoplay()
   }
 }
 

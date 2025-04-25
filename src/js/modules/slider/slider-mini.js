@@ -125,8 +125,6 @@ export default class MiniSlider extends Slider {
     render() {
         this.init()
         this.initActiveSlide()
-        // this.startAutoplay()
         this.bindTriggers()
-        // this.bindAutoplay()
     }
 }

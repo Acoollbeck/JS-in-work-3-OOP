@@ -2,6 +2,7 @@
 import MainSlider from "./modules/slider/slider-main";
 import MiniSlider from "./modules/slider/slider-mini";
 import VideoPlayer from "./modules/videoPlayer";
+import Defference from "./modules/defference";
 
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({
@@ -30,9 +31,13 @@ window.addEventListener('DOMContentLoaded', () => {
         prev: '.feed__slider .slick-prev'
     })
 
+    const defference = new Defference('.officerold', '.officernew', '.officer__card-item')
+
+
     slider.render()
     videoPlayer.render()
     showUpSlider.render()
     modulesSlider.render()
     feedSlider.render()
+    defference.render()
 })
