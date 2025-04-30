@@ -99,6 +99,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/slider/slider-mini */ "./src/js/modules/slider/slider-mini.js");
 /* harmony import */ var _modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/videoPlayer */ "./src/js/modules/videoPlayer.js");
 /* harmony import */ var _modules_defference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/defference */ "./src/js/modules/defference.js");
+/* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+
 
 
 
@@ -127,12 +129,14 @@ window.addEventListener('DOMContentLoaded', () => {
     prev: '.feed__slider .slick-prev'
   });
   const defference = new _modules_defference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item');
+  const forms = new _modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"]('.form');
   slider.render();
   videoPlayer.render();
   showUpSlider.render();
   modulesSlider.render();
   feedSlider.render();
   defference.render();
+  forms.render();
 });
 
 /***/ }),
@@ -189,6 +193,72 @@ class Defference {
     this.hideItems(this.newItems);
     this.bindTriggers(this.officerOld, this.oldItems, 'oldCounter');
     this.bindTriggers(this.officerNew, this.newItems, 'newCounter');
+  }
+}
+
+/***/ }),
+
+/***/ "./src/js/modules/forms.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/forms.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Forms; });
+class Forms {
+  constructor(forms) {
+    this.forms = document.querySelectorAll(forms);
+    this.message = {
+      load: 'Загрузга...',
+      success: 'Спасибо! Скоро мы с вами свяжемся!',
+      error: 'Что то пошло не так'
+    };
+  }
+  createMessage(message) {
+    const createMessage = document.createElement('div');
+    createMessage.style.cssText = `
+            width: 200px;
+            height: 100px;
+            color: red;
+        `;
+    this.forms.forEach(form => {
+      form.parentNode.appendChild(createMessage);
+    });
+    createMessage.textContent = this.message[message];
+    if (message === 'delete') {
+      setTimeout(() => {
+        createMessage.remove();
+      }, 5000);
+    }
+  }
+  async postData(url, data) {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    return response;
+  }
+  sendForm() {
+    this.forms.forEach(form => {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        this.createMessage('load');
+        const formData = new FormData(form);
+        this.postData('/src/assets/question.php', formData).then(response => {
+          console.log(response);
+          this.createMessage('success');
+        }).catch(error => {
+          this.createMessage('error');
+          console.log(error);
+        }).finally(this.createMessage('delete'));
+      });
+    });
+  }
+  render() {
+    this.sendForm();
   }
 }
 

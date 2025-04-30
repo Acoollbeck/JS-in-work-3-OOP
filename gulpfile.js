@@ -5,7 +5,8 @@ const webpack = require("webpack-stream");
 const browsersync = require("browser-sync");
 const sass = require("gulp-sass")(require("sass")); // Подключаем gulp-sass и sass
 
-const dist = "./dist/";
+// const dist = "./dist/";
+const dist = 'c:/MAMP/htdocs/dist'
 
 gulp.task("copy-html", () => {
     return gulp.src("./src/*.html")

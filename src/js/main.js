@@ -3,6 +3,7 @@ import MainSlider from "./modules/slider/slider-main";
 import MiniSlider from "./modules/slider/slider-mini";
 import VideoPlayer from "./modules/videoPlayer";
 import Defference from "./modules/defference";
+import Forms from "./modules/forms";
 
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({
@@ -33,6 +34,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const defference = new Defference('.officerold', '.officernew', '.officer__card-item')
 
+    const forms = new Forms('.form')
+
 
     slider.render()
     videoPlayer.render()
@@ -40,4 +43,5 @@ window.addEventListener('DOMContentLoaded', () => {
     modulesSlider.render()
     feedSlider.render()
     defference.render()
+    forms.render()
 })
