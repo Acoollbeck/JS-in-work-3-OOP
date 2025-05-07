@@ -6,12 +6,13 @@ export default class MiniSlider extends Slider {
     }
 
     init() {
+        
         this.page.style.cssText = `
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
             align-items: flex-start;
-        `
+        `   
     }
 
     bindAutoplay() {
@@ -123,6 +124,8 @@ export default class MiniSlider extends Slider {
     }
 
     render() {
+        if(!this.page) return
+
         this.init()
         this.initActiveSlide()
         this.bindTriggers()

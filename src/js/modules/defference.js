@@ -2,8 +2,10 @@ export default class Defference{
     constructor(officerOld, officerNew, officerItems) {
         this.officerOld = document.querySelector(officerOld)
         this.officerNew = document.querySelector(officerNew)
-        this.oldItems = this.officerOld.querySelectorAll(officerItems)
-        this.newItems = this.officerNew.querySelectorAll(officerItems)
+        if(this.officerOld && this.officerNew) {
+            this.oldItems = this.officerOld.querySelectorAll(officerItems)
+            this.newItems = this.officerNew.querySelectorAll(officerItems)
+        }
         this.oldCounter = 0
         this.newCounter = 0
     }
@@ -43,10 +45,11 @@ export default class Defference{
     }
 
     render() {
-        this.hideItems(this.oldItems)
-        this.hideItems(this.newItems)
-
-        this.bindTriggers(this.officerOld, this.oldItems, 'oldCounter')
-        this.bindTriggers(this.officerNew, this.newItems, 'newCounter')
+        if(this.oldItems && this.newItems) {
+            this.hideItems(this.oldItems)
+            this.hideItems(this.newItems)
+            this.bindTriggers(this.officerOld, this.oldItems, 'oldCounter')
+            this.bindTriggers(this.officerNew, this.newItems, 'newCounter')
+        }
     }
 }

@@ -7,7 +7,7 @@ export default class Slider {
         config = {}
     } = {}) {
         this.page = document.querySelector(page)
-        this.slides = [...this.page.children]
+        this.slides = this.page ? [...this.page.children] : []
         this.btns = document.querySelectorAll(btns)
         this.next = document.querySelector(next)
         this.prev = document.querySelector(prev)
@@ -17,7 +17,6 @@ export default class Slider {
         this.config = {
             autoplay: false,
             interval: 5000,
-
             ...config
         }
     }

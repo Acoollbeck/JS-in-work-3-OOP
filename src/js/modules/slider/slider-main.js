@@ -48,6 +48,8 @@ export default class MainSlider extends Slider {
     }
 
     render() {
+        if(!this.slides || this.slides.length === 0) return
+
         this.initSlide(this.slideIndex)
 
         this.btns.forEach(btn => {

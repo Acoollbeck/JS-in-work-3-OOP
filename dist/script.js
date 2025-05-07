@@ -155,8 +155,10 @@ class Defference {
   constructor(officerOld, officerNew, officerItems) {
     this.officerOld = document.querySelector(officerOld);
     this.officerNew = document.querySelector(officerNew);
-    this.oldItems = this.officerOld.querySelectorAll(officerItems);
-    this.newItems = this.officerNew.querySelectorAll(officerItems);
+    if (this.officerOld && this.officerNew) {
+      this.oldItems = this.officerOld.querySelectorAll(officerItems);
+      this.newItems = this.officerNew.querySelectorAll(officerItems);
+    }
     this.oldCounter = 0;
     this.newCounter = 0;
   }
@@ -189,10 +191,12 @@ class Defference {
     });
   }
   render() {
-    this.hideItems(this.oldItems);
-    this.hideItems(this.newItems);
-    this.bindTriggers(this.officerOld, this.oldItems, 'oldCounter');
-    this.bindTriggers(this.officerNew, this.newItems, 'newCounter');
+    if (this.oldItems && this.newItems) {
+      this.hideItems(this.oldItems);
+      this.hideItems(this.newItems);
+      this.bindTriggers(this.officerOld, this.oldItems, 'oldCounter');
+      this.bindTriggers(this.officerNew, this.newItems, 'newCounter');
+    }
   }
 }
 
@@ -211,33 +215,17 @@ __webpack_require__.r(__webpack_exports__);
 class Forms {
   constructor(forms) {
     this.forms = document.querySelectorAll(forms);
+    this.inputs = document.querySelectorAll('input');
     this.message = {
       load: 'Загрузга...',
       success: 'Спасибо! Скоро мы с вами свяжемся!',
       error: 'Что то пошло не так'
     };
   }
-  createMessage(message) {
-    const createMessage = document.createElement('div');
-    createMessage.style.cssText = `
-            width: 200px;
-            height: 100px;
-            color: red;
-        `;
-    this.forms.forEach(form => {
-      form.parentNode.appendChild(createMessage);
-    });
-    createMessage.textContent = this.message[message];
-    if (message === 'delete') {
-      setTimeout(() => {
-        createMessage.remove();
-      }, 5000);
-    }
-  }
   async postData(url, data) {
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(data)
+      body: data
     });
     return response;
   }
@@ -245,19 +233,49 @@ class Forms {
     this.forms.forEach(form => {
       form.addEventListener('submit', e => {
         e.preventDefault();
-        this.createMessage('load');
+        const createMessage = document.createElement('div');
+        createMessage.style.cssText = `
+                    font-size: 35px;
+                    padding: 20px;
+                    color: grey;
+                `;
+        form.parentNode.appendChild(createMessage);
+        createMessage.textContent = this.message.load;
         const formData = new FormData(form);
-        this.postData('/src/assets/question.php', formData).then(response => {
+        this.postData('assets/question.php', formData).then(response => {
           console.log(response);
-          this.createMessage('success');
+          createMessage.textContent = this.message.success;
         }).catch(error => {
-          this.createMessage('error');
-          console.log(error);
-        }).finally(this.createMessage('delete'));
+          createMessage.textContent = `${this.message.error}: ${error.message || error} `;
+          console.log('Ошибка отправки формы: ', error);
+        }).finally(() => {
+          this.clearInputs(form);
+          setTimeout(() => {
+            createMessage.remove();
+          }, 5000);
+        });
+      });
+    });
+  }
+  clearInputs(form) {
+    form.querySelectorAll('input').forEach(input => {
+      input.value = '';
+    });
+  }
+  checkMail() {
+    document.querySelectorAll('[name=email]').forEach(mail => {
+      mail.addEventListener('input', () => {
+        if (/[а-яё]/i.test(mail.value)) {
+          mail.value = '';
+          mail.style.border = '1px solid red';
+        } else {
+          mail.style.border = '';
+        }
       });
     });
   }
   render() {
+    this.checkMail();
     this.sendForm();
   }
 }
@@ -314,6 +332,7 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
     this.initSlide(newIndex);
   }
   render() {
+    if (!this.slides || this.slides.length === 0) return;
     this.initSlide(this.slideIndex);
     this.btns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -449,6 +468,7 @@ class MiniSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
     }
   }
   render() {
+    if (!this.page) return;
     this.init();
     this.initActiveSlide();
     this.bindTriggers();
@@ -476,7 +496,7 @@ class Slider {
     config = {}
   } = {}) {
     this.page = document.querySelector(page);
-    this.slides = [...this.page.children];
+    this.slides = this.page ? [...this.page.children] : [];
     this.btns = document.querySelectorAll(btns);
     this.next = document.querySelector(next);
     this.prev = document.querySelector(prev);
