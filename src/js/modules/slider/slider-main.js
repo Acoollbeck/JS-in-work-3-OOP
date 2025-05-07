@@ -47,11 +47,7 @@ export default class MainSlider extends Slider {
         this.initSlide(newIndex)
     }
 
-    render() {
-        if(!this.slides || this.slides.length === 0) return
-
-        this.initSlide(this.slideIndex)
-
+    bindTriggers() {
         this.btns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.changeSlide(1)
@@ -64,5 +60,17 @@ export default class MainSlider extends Slider {
                 })
             }
         })
+
+        this.btnsPrev.forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.changeSlide(-1)
+            })
+        })
+    }
+
+    render() {
+        if(!this.slides || this.slides.length === 0) return
+        this.initSlide(this.slideIndex)
+        this.bindTriggers()
     }
 }

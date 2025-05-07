@@ -110,6 +110,11 @@ window.addEventListener('DOMContentLoaded', () => {
     page: '.page',
     btns: '.next'
   });
+  const secondSlider = new _modules_slider_slider_main__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    page: '.moduleapp',
+    btns: '.next',
+    btnsPrev: '.prevmodule'
+  });
   const videoPlayer = new _modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__["default"]('.play', '.overlay');
   const showUpSlider = new _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__["default"]({
     page: '.showup__content-slider',
@@ -131,6 +136,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const defference = new _modules_defference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item');
   const forms = new _modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"]('.form');
   slider.render();
+  secondSlider.render();
   videoPlayer.render();
   showUpSlider.render();
   modulesSlider.render();
@@ -331,9 +337,7 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
     this.slideIndex = newIndex;
     this.initSlide(newIndex);
   }
-  render() {
-    if (!this.slides || this.slides.length === 0) return;
-    this.initSlide(this.slideIndex);
+  bindTriggers() {
     this.btns.forEach(btn => {
       btn.addEventListener('click', () => {
         this.changeSlide(1);
@@ -345,6 +349,16 @@ class MainSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
         });
       }
     });
+    this.btnsPrev.forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.changeSlide(-1);
+      });
+    });
+  }
+  render() {
+    if (!this.slides || this.slides.length === 0) return;
+    this.initSlide(this.slideIndex);
+    this.bindTriggers();
   }
 }
 
@@ -472,6 +486,8 @@ class MiniSlider extends _slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
     this.init();
     this.initActiveSlide();
     this.bindTriggers();
+    this.startAutoplay();
+    this.bindAutoplay();
   }
 }
 
@@ -491,6 +507,7 @@ class Slider {
   constructor({
     page = null,
     btns = null,
+    btnsPrev = null,
     next = null,
     prev = null,
     config = {}
@@ -498,6 +515,7 @@ class Slider {
     this.page = document.querySelector(page);
     this.slides = this.page ? [...this.page.children] : [];
     this.btns = document.querySelectorAll(btns);
+    this.btnsPrev = document.querySelectorAll(btnsPrev);
     this.next = document.querySelector(next);
     this.prev = document.querySelector(prev);
     this.slideIndex = 0;

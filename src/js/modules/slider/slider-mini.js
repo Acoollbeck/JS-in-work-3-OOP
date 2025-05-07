@@ -129,5 +129,7 @@ export default class MiniSlider extends Slider {
         this.init()
         this.initActiveSlide()
         this.bindTriggers()
+        this.startAutoplay()
+        this.bindAutoplay()
     }
 }

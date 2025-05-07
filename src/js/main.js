@@ -8,8 +8,15 @@ import Forms from "./modules/forms";
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({
         page: '.page', 
-        btns: '.next'
+        btns: '.next',
     })
+    
+    const secondSlider = new MainSlider({
+        page: '.moduleapp',
+        btns: '.next',
+        btnsPrev: '.prevmodule'
+    })
+
     const videoPlayer = new VideoPlayer('.play', '.overlay')
 
     const showUpSlider = new MiniSlider({
@@ -38,6 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     slider.render()
+    secondSlider.render()
     videoPlayer.render()
     showUpSlider.render()
     modulesSlider.render()
