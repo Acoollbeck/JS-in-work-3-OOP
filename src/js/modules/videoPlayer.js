@@ -6,16 +6,18 @@ export default class VideoPlayer {
         this.videoId = ''
         this.player = null
         this.isPlayerReady = false
+        this.onPlayerStateChange = this.onPlayerStateChange.bind(this)
     }
     
     initPlayer(url) {
-        if(this.player) return
+        if(this.player) {
+            this.player.loadVideoById(this.videoId)
+            return
+        }
 
         var tag = document.createElement('script');
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        
         tag.src = "https://www.youtube.com/iframe_api";
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        document.head.appendChild(tag);
         
         window.onYouTubeIframeAPIReady = () => {
             this.player = new YT.Player('player', {
@@ -26,20 +28,48 @@ export default class VideoPlayer {
                 'onready': () => {
                     this.isPlayerReady = true;
                     console.log('Player is ready')
-                }
+                },
+                'onStateChange': this.onPlayerStateChange
               }
             });
           }
     }
 
+    onPlayerStateChange(state) {
+        if(state.data === YT.PlayerState.ENDED) {
+            this.unlockNextVideo()
+        }
+    }
+
+    unlockNextVideo() {
+        const blockElem = this.activeBtn.closest('.module__video-item').nextElementSibling
+        const blockElemText = blockElem.querySelector('.play__text')
+        const blockElemBtn = blockElem.querySelector('.play__circle')
+        const svg = this.activeBtn.querySelector('svg').cloneNode(true)
+        blockElemBtn.parentNode.setAttribute('data-block', 'false')
+        blockElemBtn.querySelector('svg').style.display = 'none'
+        blockElemBtn.appendChild(svg)
+        blockElemText.classList.remove('attention')
+        blockElemBtn.classList.remove('closed')
+        blockElemText.textContent = 'play video'
+        blockElem.style.opacity = '1'
+        blockElem.style.filter = 'none'
+    }
+
     playVideo() {
-        this.btns.forEach(btn => {
+        this.btns.forEach((btn, i) => {
+            if(i % 2 !== 0 && btn.closest('.module__video-item')) {
+                btn.setAttribute('data-block', 'true')
+            }
+
             btn.addEventListener('click', () => {
-                this.videoId = btn.getAttribute('data-url')
+                if(btn.getAttribute('data-block') === 'true') return
+                this.activeBtn = btn
                 this.popup.style.display = 'flex'
+                this.videoId = btn.getAttribute('data-url')
 
                 if(this.isPlayerReady) {
-                    this.player.loadVideoById(this.videoId)
+                    this.player.loadVideoById({ videoId: this.videoId });
                 } else {
                     this.initPlayer(this.videoId)
                 }

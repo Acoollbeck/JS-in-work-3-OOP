@@ -17,7 +17,9 @@ window.addEventListener('DOMContentLoaded', () => {
         btnsPrev: '.prevmodule'
     })
 
-    const videoPlayer = new VideoPlayer('.play', '.overlay')
+    const videoPlayer = new VideoPlayer('.page .play', '.overlay')
+
+    const secondVideoPlayer = new VideoPlayer('.moduleapp .play', '.overlay')
 
     const showUpSlider = new MiniSlider({
         page: '.showup__content-slider',
@@ -47,6 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
     slider.render()
     secondSlider.render()
     videoPlayer.render()
+    secondVideoPlayer.render()
     showUpSlider.render()
     modulesSlider.render()
     feedSlider.render()
