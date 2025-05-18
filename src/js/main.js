@@ -5,6 +5,7 @@ import VideoPlayer from "./modules/videoPlayer";
 import Defference from "./modules/defference";
 import Forms from "./modules/forms";
 import Accordion from "./modules/slider/accordion";
+import Download from "./modules/slider/download";
 
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({
@@ -50,6 +51,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const accordion = new Accordion('.module__info-show .plus', '.msg')
 
+    const download = new Download('.download')
+
 
     slider.render()
     secondSlider.render()
@@ -61,4 +64,5 @@ window.addEventListener('DOMContentLoaded', () => {
     defference.render()
     forms.render()
     accordion.render()
+    download.render()
 })

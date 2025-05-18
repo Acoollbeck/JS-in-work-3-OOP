@@ -101,6 +101,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_defference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/defference */ "./src/js/modules/defference.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_slider_accordion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/slider/accordion */ "./src/js/modules/slider/accordion.js");
+/* harmony import */ var _modules_slider_download__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/slider/download */ "./src/js/modules/slider/download.js");
+
 
 
 
@@ -141,6 +143,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const defference = new _modules_defference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item');
   const forms = new _modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"]('.form');
   const accordion = new _modules_slider_accordion__WEBPACK_IMPORTED_MODULE_5__["default"]('.module__info-show .plus', '.msg');
+  const download = new _modules_slider_download__WEBPACK_IMPORTED_MODULE_6__["default"]('.download');
   slider.render();
   secondSlider.render();
   videoPlayer.render();
@@ -151,6 +154,7 @@ window.addEventListener('DOMContentLoaded', () => {
   defference.render();
   forms.render();
   accordion.render();
+  download.render();
 });
 
 /***/ }),
@@ -346,6 +350,47 @@ class Accordion {
   }
   render() {
     this.changeBlocks();
+    this.bindTriggers();
+  }
+}
+
+/***/ }),
+
+/***/ "./src/js/modules/slider/download.js":
+/*!*******************************************!*\
+  !*** ./src/js/modules/slider/download.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Download; });
+class Download {
+  constructor(triggers) {
+    this.btns = document.querySelectorAll(triggers);
+    this.path = 'assets/img/mainbg.jpg';
+  }
+  bindTriggers() {
+    this.btns.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.download(this.path);
+        //Все равно проиходит переход к первому слайду, при клике по области вокург кнопки
+        // Почему?К сожалению, не представляется возможным понять
+      });
+    });
+  }
+  download(path) {
+    const link = document.createElement('a');
+    link.setAttribute('href', path);
+    link.setAttribute('download', 'Good Picture');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  render() {
     this.bindTriggers();
   }
 }
