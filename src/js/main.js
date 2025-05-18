@@ -4,6 +4,7 @@ import MiniSlider from "./modules/slider/slider-mini";
 import VideoPlayer from "./modules/videoPlayer";
 import Defference from "./modules/defference";
 import Forms from "./modules/forms";
+import Accordion from "./modules/slider/accordion";
 
 window.addEventListener('DOMContentLoaded', () => {
     const slider = new MainSlider({
@@ -29,6 +30,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const modulesSlider = new MiniSlider({
         page: '.modules__content-slider',
+        next: '.slick-next',
+        prev: '.slick-prev',
         config: {
             autoplay: true,
             interval: 5000
@@ -45,6 +48,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const forms = new Forms('.form')
 
+    const accordion = new Accordion('.module__info-show .plus', '.msg')
+
 
     slider.render()
     secondSlider.render()
@@ -55,4 +60,5 @@ window.addEventListener('DOMContentLoaded', () => {
     feedSlider.render()
     defference.render()
     forms.render()
+    accordion.render()
 })

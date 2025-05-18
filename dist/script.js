@@ -100,6 +100,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/videoPlayer */ "./src/js/modules/videoPlayer.js");
 /* harmony import */ var _modules_defference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/defference */ "./src/js/modules/defference.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+/* harmony import */ var _modules_slider_accordion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/slider/accordion */ "./src/js/modules/slider/accordion.js");
+
 
 
 
@@ -124,6 +126,8 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   const modulesSlider = new _modules_slider_slider_mini__WEBPACK_IMPORTED_MODULE_1__["default"]({
     page: '.modules__content-slider',
+    next: '.slick-next',
+    prev: '.slick-prev',
     config: {
       autoplay: true,
       interval: 5000
@@ -136,6 +140,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   const defference = new _modules_defference__WEBPACK_IMPORTED_MODULE_3__["default"]('.officerold', '.officernew', '.officer__card-item');
   const forms = new _modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"]('.form');
+  const accordion = new _modules_slider_accordion__WEBPACK_IMPORTED_MODULE_5__["default"]('.module__info-show .plus', '.msg');
   slider.render();
   secondSlider.render();
   videoPlayer.render();
@@ -145,6 +150,7 @@ window.addEventListener('DOMContentLoaded', () => {
   feedSlider.render();
   defference.render();
   forms.render();
+  accordion.render();
 });
 
 /***/ }),
@@ -285,6 +291,62 @@ class Forms {
   render() {
     this.checkMail();
     this.sendForm();
+  }
+}
+
+/***/ }),
+
+/***/ "./src/js/modules/slider/accordion.js":
+/*!********************************************!*\
+  !*** ./src/js/modules/slider/accordion.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Accordion; });
+class Accordion {
+  constructor(btns, blocks) {
+    this.btns = document.querySelectorAll(btns);
+    this.blocks = document.querySelectorAll(blocks);
+  }
+  bindTriggers() {
+    this.btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const block = btn.parentNode.nextElementSibling;
+        if (block.style.opacity === '0') {
+          this.toggleBlocks(true, block);
+        } else {
+          this.toggleBlocks(false, block);
+        }
+      });
+    });
+  }
+  toggleBlocks(show, block) {
+    if (show) {
+      block.style.maxHeight = '150px';
+      block.style.opacity = 1;
+      block.style.visibility = 'visible';
+    } else {
+      block.style.maxHeight = 0;
+      block.style.opacity = 0;
+      block.style.visibility = 'hidden';
+    }
+  }
+  changeBlocks() {
+    this.blocks.forEach(block => {
+      block.style.display = 'block';
+      block.style.maxHeight = 0;
+      block.style.opacity = 0;
+      block.style.visibility = 'hidden';
+      block.style.overflow = 'hidden';
+      block.style.transition = 'all .5s ease-in-out';
+    });
+  }
+  render() {
+    this.changeBlocks();
+    this.bindTriggers();
   }
 }
 
